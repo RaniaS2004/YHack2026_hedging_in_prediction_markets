@@ -6,6 +6,7 @@ import { Platform, UserPosition } from "@/types";
 import PlatformBadge from "@/components/PlatformBadge";
 import {
   EMPTY_PORTFOLIO_ACCOUNT_STATE,
+  PortfolioHedgeRecord,
   buildMonitoringSeries,
   loadPortfolioAccountState,
   removeConnectedAccount,
