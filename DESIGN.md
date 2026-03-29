@@ -37,9 +37,9 @@ Clean, professional, data-forward. Light mode primary. Premium SaaS feel (Stripe
 ## Typography
 
 ### Font Stack
-- **Headings**: `Satoshi` (via Fontshare CDN), fallback: `system-ui`
-- **Body**: `DM Sans` (via next/font/google), fallback: `system-ui`
-- **Mono/Numbers**: `Geist Mono` (via next/font/google), fallback: `SF Mono, Menlo`
+- **Headings**: `Avenir Next`, fallback: `Segoe UI, system-ui`
+- **Body**: `Avenir Next`, fallback: `Segoe UI, system-ui`
+- **Mono/Numbers**: `SF Mono`, fallback: `Menlo, Monaco, Consolas`
 
 ### Scale
 - **Display**: 36px / 700 / tracking -0.025em
@@ -71,6 +71,20 @@ Clean, professional, data-forward. Light mode primary. Premium SaaS feel (Stripe
 - Primary: indigo bg, white text, 12px radius, subtle indigo shadow
 - Hover: darker indigo (#4F46E5)
 - Disabled: 40% opacity
+
+### Homepage Hero
+- Left side should answer the product in one sentence
+- Right side should feel like a live desk review, not a decorative mock card
+- Show before/after hedge logic visually whenever possible
+
+### Hedge Workstation
+- Intake must stay compact enough that the sleeve appears quickly
+- Ticket rail should remain visible while evaluating contracts
+- Hedge cards should optimize for scan speed over explanation density
+
+### Portfolio
+- The hero visual should be the payoff change, not account setup
+- Account cards should feel operational, but never turn into mini dashboards
 
 ### Cards (HedgeCard)
 - White bg, 1px border, 12px radius

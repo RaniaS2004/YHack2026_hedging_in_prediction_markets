@@ -2,74 +2,125 @@
 
 ## Project
 
-**HedgeKit** — AI-powered cross-platform prediction market hedging engine. YHack 2026.
+**HedgeKit** is a prediction-market-native hedging workstation built for YHack 2026.
 
-## Development Setup
+The core product is not an arbitrage app. The core product is hedging:
+
+- hedge prediction market positions
+- hedge crypto or macro books
+- hedge external business or real-world risk
+- express the overlay using prediction market contracts
+
+## Development setup
 
 ```bash
-npm install          # install dependencies
-npm run dev          # start dev server (http://localhost:3000)
-npm run build        # production build
-npm test             # run tests (vitest)
+npm install
+npm run dev
+npm run lint
+npm run build
+npm test
 ```
 
-Env vars needed in `.env.local`:
-- `SUPABASE_URL`, `SUPABASE_SERVICE_KEY` — Supabase project
-- `GROK_API_KEY` — xAI Grok API key
-- `AUTH_TOKEN` — Bearer token for API auth (default: hedgehog-dev-token)
-- `POLYMARKET_API_KEY`, `POLYMARKET_PRIVATE_KEY` — Polymarket CLOB (optional for dev)
-- `KALSHI_API_KEY`, `KALSHI_PRIVATE_KEY` — Kalshi API (optional for dev)
+## Required env vars
 
-## Tech Stack
+Core:
 
-- **Next.js 16** (App Router, TypeScript, Tailwind CSS)
-- **Supabase** (PostgreSQL + Edge Functions + Cron)
-- **Grok API** via OpenAI SDK (model: grok-4-1-fast-non-reasoning)
-- **Polymarket CLOB API** (real execution)
-- **Kalshi API** (real data, simulated execution)
-- **CoinGecko API** (crypto prices)
-- **Recharts** (payoff visualization)
-- **Vitest** (testing)
+- `OPENAI_API_KEY`
+- `AUTH_TOKEN`
+
+Database-backed paths:
+
+- `SUPABASE_URL`
+- `SUPABASE_SERVICE_KEY`
+
+Optional venue / model integrations:
+
+- `GROK_API_KEY`
+- `KALSHI_API_KEY`
+- `KALSHI_PRIVATE_KEY_BASE64`
+- `LIMITLESS_API_KEY`
+- `POLYMARKET_API_KEY`
+- `POLYMARKET_PRIVATE_KEY`
+
+## Tech stack
+
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS v4
+- OpenAI SDK
+- Recharts
+- Supabase
+- Vitest
 
 ## Architecture
 
-```
+```text
 src/
-├── app/                          # Next.js App Router
-│   ├── page.tsx                  # Dashboard
-│   ├── hedge/page.tsx            # Hedge Recommendations
-│   ├── execute/[sagaId]/page.tsx # Execution Status
+├── app/
+│   ├── page.tsx                  # homepage
+│   ├── hedge/page.tsx            # hedge workstation
+│   ├── portfolio/page.tsx        # portfolio workstation
+│   ├── arbitrage/page.tsx        # market-intelligence / arb page
+│   ├── execute/[sagaId]/page.tsx # execution status
 │   └── api/
-│       ├── markets/route.ts      # GET market data
-│       ├── hedge/
-│       │   ├── recommend/route.ts # POST hedge discovery
-│       │   └── execute/route.ts   # POST saga creation
-│       └── execution/
-│           └── [sagaId]/route.ts  # GET saga status
+│       ├── hedge/recommend/route.ts
+│       ├── hedge/execute/route.ts
+│       ├── hedge/feedback/route.ts
+│       ├── arbitrage/scan/route.ts
+│       ├── markets/route.ts
+│       └── execution/[sagaId]/route.ts
+├── components/
 ├── lib/
-│   ├── markets/                  # Market data (Polymarket, Kalshi, samples)
-│   ├── llm/                      # Grok hedge discovery pipeline
-│   ├── execution/                # Saga state machine
-│   ├── analysis/                 # Payoff math
-│   ├── db/                       # Supabase client
-│   └── auth.ts                   # Bearer token auth + rate limiting
-├── components/                   # UI components
-└── types/                        # TypeScript types
+│   ├── agents/
+│   ├── analysis/
+│   ├── db/
+│   ├── execution/
+│   ├── llm/
+│   ├── markets/
+│   └── portfolio/
+└── types/
 ```
 
-## Key Patterns
+## Hedge engine
 
-- All API routes require `Authorization: Bearer <AUTH_TOKEN>` header
-- Market data from 6 platforms: Polymarket + Kalshi (real), 4 others (sample data)
-- Execution: real on Polymarket only, simulated on all others
-- Saga pattern: PENDING → EXECUTING → COMPLETED | ROLLING_BACK → ROLLED_BACK | FAILED
-- $25 per-saga spending cap
-- Grok structured output with Zod validation for hedge recommendations
+Main file: `src/lib/llm/hedge-discovery.ts`
 
-## gstack
+Current hedge pipeline:
 
-Use `/browse` for all web browsing. Never use `mcp__claude-in-chrome__*` tools.
+1. Parse mandate into a structured risk brief
+2. Search live and seeded market universe
+3. Construct a sleeve
+4. Run skeptic review
+5. Retry via causal-factor expansion if the first pass is weak
+6. Return committee decision + grouped recommendations
 
-Available skills: `/office-hours`, `/plan-ceo-review`, `/plan-eng-review`, `/plan-design-review`, `/design-consultation`, `/review`, `/ship`, `/land-and-deploy`, `/canary`, `/benchmark`, `/browse`, `/qa`, `/qa-only`, `/design-review`, `/setup-browser-cookies`, `/setup-deploy`, `/retro`, `/investigate`, `/document-release`, `/codex`, `/cso`, `/careful`, `/freeze`, `/guard`, `/unfreeze`, `/gstack-upgrade`.
+This is a hybrid system:
 
-If gstack skills aren't working, run `cd .claude/skills/gstack && ./setup` to build the binary and register skills.
+- live market fetch where possible
+- structured agent stages
+- heuristic and causal retry logic
+- curated demo sleeves for reliability
+
+## Product notes
+
+- Homepage is marketing-led
+- `/hedge` is the main product
+- `/portfolio` simulates connected venue books and sleeve monitoring
+- `/arbitrage` is positioned as market intelligence, not the main story
+
+## Execution notes
+
+- multi-leg execution uses a saga model
+- real execution path is primarily modeled around Polymarket
+- simulated legs remain visible in the UI
+
+## Repo notes
+
+- `npm run lint` is intentionally scoped to `src`
+- remote web-font dependencies were removed from the app shell for safer builds
+- if local secrets were exposed during development, rotate them before sharing or deploying
+
+## gstack note
+
+Use the vendored gstack skills already present in the repo when explicitly requested.
