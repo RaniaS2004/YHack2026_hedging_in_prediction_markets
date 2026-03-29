@@ -52,6 +52,12 @@ const FALLBACK_MAPPINGS: FallbackMapping[] = [
     correlationStrength: 0.5,
   },
   {
+    keywords: ["iran", "oil", "crude", "middle east", "geopolitical", "war", "conflict"],
+    targetCategories: ["politics", "economics"],
+    defaultSide: "YES",
+    correlationStrength: 0.68,
+  },
+  {
     keywords: ["ai regulation", "tech regulation"],
     targetCategories: ["tech"],
     defaultSide: "YES",

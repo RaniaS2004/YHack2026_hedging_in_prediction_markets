@@ -13,6 +13,7 @@ const PLATFORM_FEES: Record<string, number> = {
 
 const MIN_PROFIT_MARGIN = 0.005; // 0.5% minimum profit to show
 const MIN_LIQUIDITY = 50; // $50 minimum liquidity
+const CLASSIFICATION_TIMEOUT_MS = 3500;
 
 // Cache for arb results
 let cachedOpportunities: ArbOpportunity[] = [];
@@ -60,7 +61,12 @@ export async function scanForArbitrage(options?: {
   const marketMap = new Map(allMarkets.map((m) => [m.id, m]));
 
   // Get all classified relationships
-  const allMatches = await classifyAllMarkets(allMarkets);
+  const allMatches = await Promise.race([
+    classifyAllMarkets(allMarkets),
+    new Promise<MarketMatch[]>((resolve) =>
+      setTimeout(() => resolve([]), CLASSIFICATION_TIMEOUT_MS)
+    ),
+  ]);
 
   // Filter to SAME_EVENT matches for arbitrage
   const sameEventMatches = allMatches.filter(
@@ -94,7 +100,8 @@ export async function scanForArbitrage(options?: {
   }
 
   // Build spread table
-  const spreadTable = buildSpreadTable(allMarkets, allMatches);
+  const spreadTable =
+    allMatches.length > 0 ? buildSpreadTable(allMarkets, allMatches) : [];
 
   cachedOpportunities = opportunities;
   cachedMatches = allMatches;
@@ -157,7 +164,8 @@ async function refreshPricesOnly(): Promise<{
   }
 
   // Rebuild spread table with fresh prices
-  const spreadTable = buildSpreadTable(allMarkets, cachedMatches);
+  const spreadTable =
+    cachedMatches.length > 0 ? buildSpreadTable(allMarkets, cachedMatches) : [];
 
   cachedOpportunities = opportunities;
   cachedSpreadTable = spreadTable;

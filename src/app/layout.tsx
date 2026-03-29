@@ -1,23 +1,11 @@
 import type { Metadata } from "next";
-import { DM_Sans, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import "./globals.css";
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "HedgeKit — One-Click Hedging For Market And Real-World Risk",
+  title: "HedgeKit — Risk Copilot For Event Exposure",
   description:
-    "Hedge prediction market exposure and real-world risk in one place. Discover hedges, compare payoff impact, and execute multi-leg protection in one click.",
+    "Understand event exposure, review prediction-market hedges, compare payoff impact, and execute protection with clear real-versus-simulated disclosure.",
 };
 
 export default function RootLayout({
@@ -26,10 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${dmSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
+    <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col bg-white">
         <nav className="sticky top-0 z-50 border-b border-[#E2E8F0] bg-white/80 backdrop-blur-sm">
           <div className="mx-auto max-w-[1120px] px-6 h-14 flex items-center justify-between">
@@ -66,7 +51,7 @@ export default function RootLayout({
                 href="/arbitrage"
                 className="px-3 py-1.5 text-[13px] font-medium text-[#64748B] hover:text-[#0F172A] hover:bg-[#F8FAFC] rounded-md transition-all duration-150"
               >
-                Arbitrage
+                Market Intelligence
               </Link>
             </div>
           </div>

@@ -17,6 +17,6 @@ export function getSupabase(): SupabaseClient {
 // Convenience alias for existing imports
 export const supabase = new Proxy({} as SupabaseClient, {
   get(_, prop) {
-    return (getSupabase() as any)[prop];
+    return getSupabase()[prop as keyof SupabaseClient];
   },
 });

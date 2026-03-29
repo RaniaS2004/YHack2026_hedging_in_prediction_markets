@@ -71,18 +71,26 @@ export default function HedgeCard({
     setShowDetails((prev) => !prev);
   }
 
+  const isNonObviousProxy =
+    rec.hedgeType === "proxy" &&
+    /non-obvious|second-order|spillover|risk-off/i.test(rec.whyThisWorks);
+  const compactWhyThisWorks =
+    rec.whyThisWorks.length > 120
+      ? `${rec.whyThisWorks.slice(0, 117).trimEnd()}...`
+      : rec.whyThisWorks;
+
   return (
     <div
       onClick={onToggle}
-      className={`cursor-pointer rounded-2xl border p-4 transition-all duration-150 ${
+      className={`cursor-pointer rounded-2xl border p-3.5 transition-all duration-150 ${
         selected
           ? "border-[#6366F1] bg-[#6366F1]/[0.03] shadow-[0_0_0_1px_rgba(99,102,241,0.15)]"
           : "border-[#E2E8F0] bg-white hover:border-[#CBD5E1] hover:shadow-[0_1px_3px_rgba(0,0,0,0.04)]"
       }`}
     >
-      <div className="mb-3 flex items-start justify-between gap-3">
+      <div className="mb-2.5 flex items-start justify-between gap-3">
         <div>
-          <div className="mb-2 flex flex-wrap items-center gap-2">
+          <div className="mb-1.5 flex flex-wrap items-center gap-2">
             <PlatformBadge platform={rec.platform} />
             <span className="rounded-full border border-[#E2E8F0] bg-[#F8FAFC] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.05em] text-[#64748B]">
               {TYPE_LABELS[rec.hedgeType]}
@@ -90,6 +98,11 @@ export default function HedgeCard({
             <span className="rounded-full border border-[#10B981]/20 bg-[#10B981]/[0.06] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.05em] text-[#059669]">
               {Math.round(rec.coverageEstimate * 100)}% coverage
             </span>
+            {isNonObviousProxy && (
+              <span className="rounded-full border border-[#F59E0B]/30 bg-[#FFFBEB] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.05em] text-[#B45309]">
+                Non-obvious proxy
+              </span>
+            )}
           </div>
           <h3 className="text-[14px] font-semibold leading-snug text-[#0F172A]">
             {rec.title}
@@ -101,11 +114,11 @@ export default function HedgeCard({
         />
       </div>
 
-      <p className="mb-3 text-[13px] leading-relaxed text-[#475569]">
-        {rec.protectsAgainst}
+      <p className="mb-2.5 text-[12px] leading-relaxed text-[#64748B]">
+        Protects if {rec.protectsAgainst}
       </p>
 
-      <div className="mb-3 grid gap-2 sm:grid-cols-3">
+      <div className="mb-2.5 grid gap-2 sm:grid-cols-3">
         <div className="rounded-xl border border-[#E2E8F0] bg-[#F8FAFC] px-3 py-2">
           <p className="text-[10px] font-medium uppercase tracking-[0.05em] text-[#94A3B8]">
             Position
@@ -132,7 +145,7 @@ export default function HedgeCard({
         </div>
       </div>
 
-      <div className="mb-3 rounded-xl border border-[#E2E8F0] bg-white p-3">
+      <div className="mb-2.5 rounded-xl border border-[#E2E8F0] bg-white p-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <p className="text-[12px] font-medium text-[#0F172A]">
             Built for {OBJECTIVE_LABELS[objective].toLowerCase()}
@@ -142,13 +155,23 @@ export default function HedgeCard({
           </p>
         </div>
         <p className="mt-1 text-[12px] leading-relaxed text-[#64748B]">
-          {rec.whyThisWorks}
+          {compactWhyThisWorks}
         </p>
+        {isNonObviousProxy && (
+          <div className="mt-2 rounded-xl border border-[#FDE68A]/50 bg-[#FFFBEB] px-3 py-2">
+            <p className="text-[11px] font-semibold text-[#92400E]">
+              This is the magic leg
+            </p>
+            <p className="mt-1 text-[11px] leading-relaxed text-[#92400E]">
+              It is not the direct event contract. It captures the second-order market stress that usually follows the main downside scenario.
+            </p>
+          </div>
+        )}
       </div>
 
       <button
         onClick={toggleDetails}
-        className="mb-3 flex items-center gap-1.5 text-[11px] font-medium text-[#6366F1] transition-colors hover:text-[#4F46E5]"
+        className="mb-2 flex items-center gap-1.5 text-[11px] font-medium text-[#6366F1] transition-colors hover:text-[#4F46E5]"
       >
         <svg
           className={`h-3 w-3 transition-transform ${showDetails ? "rotate-90" : ""}`}
@@ -167,11 +190,7 @@ export default function HedgeCard({
       </button>
 
       {showDetails && (
-        <div className="mb-3 space-y-2 rounded-xl border border-[#6366F1]/10 bg-[#6366F1]/[0.02] p-3 text-[12px] leading-relaxed text-[#475569]">
-          <p>
-            <span className="font-semibold text-[#0F172A]">Why it works:</span>{" "}
-            {rec.whyThisWorks}
-          </p>
+        <div className="mb-2.5 space-y-2 rounded-xl border border-[#6366F1]/10 bg-[#6366F1]/[0.02] p-3 text-[12px] leading-relaxed text-[#475569]">
           <p>
             <span className="font-semibold text-[#0F172A]">Tradeoff:</span>{" "}
             {rec.tradeoffs}
@@ -187,7 +206,7 @@ export default function HedgeCard({
       )}
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4 font-mono text-[11px] text-[#94A3B8]">
+        <div className="flex items-center gap-3 font-mono text-[10px] text-[#94A3B8]">
           <span className="capitalize">{rec.category}</span>
           <span className="text-[#E2E8F0]">|</span>
           <span>{rec.suggestedSize} base</span>

@@ -1,13 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 // Mock process.env before importing
 vi.stubEnv("AUTH_TOKEN", "test-token-123");
 
 import { authenticate } from "../auth";
-
-function makeRequest(headers: Record<string, string> = {}): Request {
-  return new Request("http://localhost/api/test", { headers }) as unknown as Request;
-}
 
 // We need to cast since authenticate expects NextRequest but we're testing logic
 function callAuth(headers: Record<string, string> = {}) {
@@ -15,7 +11,7 @@ function callAuth(headers: Record<string, string> = {}) {
     headers: {
       get: (name: string) => headers[name.toLowerCase()] || null,
     },
-  } as any;
+  } as { headers: { get: (name: string) => string | null } };
   return authenticate(req);
 }
 

@@ -94,10 +94,34 @@ export interface HedgeExecutionPlan {
   summary: string;
 }
 
+export type HedgeCommitteeRole =
+  | "risk_parser"
+  | "market_search"
+  | "hedge_constructor"
+  | "skeptic";
+
+export interface HedgeCommitteeMember {
+  role: HedgeCommitteeRole;
+  title: string;
+  verdict: "support" | "caution";
+  summary: string;
+}
+
+export interface HedgeCommitteeDecision {
+  recommendedSleeve: string;
+  acceptanceReason: string;
+  dissentingView: string | null;
+  confidence: "high" | "medium" | "speculative";
+}
+
 export interface HedgeDiscoveryResult {
   recommendations: HedgeRecommendation[];
   groups: HedgeRecommendationGroup[];
   exposureSummary: ExposureSummary;
+  committee: {
+    members: HedgeCommitteeMember[];
+    decision: HedgeCommitteeDecision;
+  };
   defaultObjective: HedgeObjective;
   inputType: HedgeInputType;
   fallbackUsed: boolean;
