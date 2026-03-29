@@ -11,7 +11,7 @@ function callAuth(headers: Record<string, string> = {}) {
     headers: {
       get: (name: string) => headers[name.toLowerCase()] || null,
     },
-  } as { headers: { get: (name: string) => string | null } };
+  } as unknown as Parameters<typeof authenticate>[0];
   return authenticate(req);
 }
 

@@ -29,6 +29,10 @@ import { zodResponseFormat } from "openai/helpers/zod";
 const LIQUIDITY_THRESHOLD = 100; // $100 minimum depth
 const GROK_TIMEOUT = 15_000; // 15 seconds
 
+function isNonNullable<T>(value: T): value is NonNullable<T> {
+  return value !== null && value !== undefined;
+}
+
 const CAUSAL_FACTOR_GRAPH: Array<{
   keywords: string[];
   factors: string[];
@@ -984,7 +988,7 @@ function buildCuratedDemoResult(
           (leg.side === "YES" ? market.yesPrice : market.noPrice),
       } satisfies HedgeRecommendation;
     })
-    .filter((value): value is HedgeRecommendation => value !== null);
+    .filter(isNonNullable);
 
   if (recommendations.length === 0) return null;
 
@@ -1235,7 +1239,7 @@ function buildCausalFallbackRecommendations(
         suggestedMaxLoss: getSuggestedSize(0.4, confidence) * market.yesPrice,
       } satisfies HedgeRecommendation;
     })
-    .filter((rec): rec is HedgeRecommendation => rec !== null)
+    .filter(isNonNullable)
     .sort((a, b) => b.confidence - a.confidence)
     .slice(0, 3);
 }
