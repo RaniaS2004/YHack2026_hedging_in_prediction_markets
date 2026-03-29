@@ -13,6 +13,8 @@ import {
   upsertConnectedAccount,
 } from "@/lib/portfolio/account-store";
 
+type ConnectedDemoPlatform = "polymarket" | "kalshi" | "limitless";
+
 const DEMO_POSITIONS: Record<Platform, UserPosition[]> = {
   polymarket: [
     {
@@ -114,14 +116,14 @@ const DEMO_POSITIONS: Record<Platform, UserPosition[]> = {
   opinion: [],
 };
 
-const OAUTH_PLATFORMS: { platform: Platform; name: string; color: string }[] = [
+const OAUTH_PLATFORMS: { platform: ConnectedDemoPlatform; name: string; color: string }[] = [
   { platform: "polymarket", name: "Polymarket", color: "#3B82F6" },
   { platform: "kalshi", name: "Kalshi", color: "#8B5CF6" },
   { platform: "limitless", name: "Limitless", color: "#22C55E" },
 ];
 
 const PLATFORM_DEMO_META: Record<
-  "polymarket" | "kalshi" | "limitless",
+  ConnectedDemoPlatform,
   {
     defaultAccountLabel: string;
     defaultEmail: string;
