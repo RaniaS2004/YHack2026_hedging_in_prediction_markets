@@ -1,0 +1,44 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,600,500,400&display=swap');
+@import "tailwindcss";
+
+:root {
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+  --surface: #F8FAFC;
+  --border: #E2E8F0;
+  --border-hover: #CBD5E1;
+  --text-secondary: #64748B;
+  --text-muted: #94A3B8;
+  --accent: #6366F1;
+  --accent-hover: #4F46E5;
+  --accent-muted: rgba(99, 102, 241, 0.08);
+  --green: #10B981;
+  --green-bg: rgba(16, 185, 129, 0.08);
+  --red: #EF4444;
+  --red-bg: rgba(239, 68, 68, 0.08);
+  --yellow: #F59E0B;
+  --yellow-bg: rgba(245, 158, 11, 0.08);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-dm-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Satoshi', system-ui, -apple-system, sans-serif;
+}
+
+.font-mono, code, pre, [class*="tabular-nums"] {
+  font-family: var(--font-geist-mono), 'SF Mono', 'Menlo', monospace;
+}
