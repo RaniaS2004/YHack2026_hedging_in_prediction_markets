@@ -4,6 +4,10 @@ Prediction-market-native hedging workstation for event books, crypto exposure, a
 
 HedgeKit is built around one core idea: the hedge overlay itself should be expressed in prediction market contracts. The product takes a mandate, parses the downside, searches markets across venues, constructs a hedge sleeve, runs a skeptic pass, shows before-versus-after risk, and only then moves into one-click execution.
 
+## Live demo
+
+Production deployment: [y-hack2026-hedging-in-prediction-markets-49m8idizm.vercel.app](https://y-hack2026-hedging-in-prediction-markets-49m8idizm.vercel.app)
+
 ## What it does
 
 - Hedges prediction market positions with other prediction market contracts
