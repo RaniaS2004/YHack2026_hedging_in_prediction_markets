@@ -185,7 +185,7 @@ export default function PortfolioPage() {
   const accounts = portfolioState.accounts;
   const existingHedges = portfolioState.hedges;
   const [selectedPositionIds, setSelectedPositionIds] = useState<Set<string>>(new Set());
-  const [pendingPlatform, setPendingPlatform] = useState<Platform | null>(null);
+  const [pendingPlatform, setPendingPlatform] = useState<ConnectedDemoPlatform | null>(null);
   const [connectionForm, setConnectionForm] = useState<ConnectionForm>(EMPTY_FORM);
   const [connecting, setConnecting] = useState<Platform | null>(null);
 
